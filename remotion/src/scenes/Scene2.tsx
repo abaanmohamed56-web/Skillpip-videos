@@ -3,16 +3,18 @@ import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { GOLD, FONT, WIDTH, HEIGHT } from "../constants";
 import { Background } from "../components/Background";
 import { Phone } from "../components/Phone";
+import { TradingScreen } from "../components/TradingScreen";
 
 export const Scene2: React.FC = () => {
   const frame = useCurrentFrame();
 
-  /* ── Phone 3-D reveal ── */
-  const phoneOpacity = interpolate(frame, [0, 42], [0, 1], { extrapolateRight: "clamp" });
-  const rotY  = interpolate(frame, [0, 180, 270, 360], [-65, 12, -10, -6], { extrapolateRight: "clamp" });
-  const rotX  = interpolate(frame, [0, 180, 270, 360], [10, -5, 3, 2],   { extrapolateRight: "clamp" });
-  const tY    = interpolate(frame, [0, 180, 270, 360], [40, -8, 0, 0],   { extrapolateRight: "clamp" });
-  const scale = interpolate(frame, [0, 180, 270, 360], [0.82, 1.02, 1, 1], { extrapolateRight: "clamp" });
+  /* ── Phone 3-D reveal — Apple-style rise from below ── */
+  const phoneOpacity = interpolate(frame, [0, 36], [0, 1], { extrapolateRight: "clamp" });
+  /* Start nearly face-on, tilted slightly left, rise up smoothly */
+  const rotY  = interpolate(frame, [0, 60, 150, 260, 360], [-22, -16, 6, -4, -3], { extrapolateRight: "clamp" });
+  const rotX  = interpolate(frame, [0, 60, 150, 260, 360], [14,   8, -3,  2,  2], { extrapolateRight: "clamp" });
+  const tY    = interpolate(frame, [0, 60, 150, 260, 360], [90,  50,  0,  0,  0], { extrapolateRight: "clamp" });
+  const scale = interpolate(frame, [0, 60, 150, 260, 360], [0.88, 0.95, 1.02, 1, 1], { extrapolateRight: "clamp" });
 
   /* ── Gold sweep ── */
   const sweepOffset = ((frame * 0.8) % 100) / 100;
@@ -53,7 +55,9 @@ export const Scene2: React.FC = () => {
             transform: `perspective(1200px) rotateY(${rotY}deg) rotateX(${rotX}deg) translateY(${tY}px) scale(${scale})`,
           }}
         >
-          <Phone width={PHONE_W} showSweep sweepOffset={sweepOffset} />
+          <Phone width={PHONE_W} showSweep sweepOffset={sweepOffset}>
+            <TradingScreen width={PHONE_W} height={PHONE_W * 2.165} />
+          </Phone>
         </div>
       </AbsoluteFill>
 

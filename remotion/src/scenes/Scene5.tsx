@@ -1,8 +1,6 @@
 import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { GOLD, GOLD_B, FONT, WIDTH, HEIGHT } from "../constants";
-import { Particles } from "../components/Particles";
-import { CandleChart } from "../components/CandleChart";
 
 export const Scene5: React.FC = () => {
   const frame = useCurrentFrame();
@@ -42,12 +40,6 @@ export const Scene5: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: "#000" }}>
-      {/* Energized charts */}
-      <CandleChart x={0} y={HEIGHT * 0.08} width={WIDTH} height={HEIGHT * 0.38} alpha={0.22} speed={0.65} seed={0} />
-      <CandleChart x={0} y={HEIGHT * 0.58} width={WIDTH} height={HEIGHT * 0.28} alpha={0.12} speed={0.40} seed={42} />
-
-      {/* Fast particles */}
-      <Particles count={200} speedMult={1.6} />
 
       {/* Central pulse glow */}
       <AbsoluteFill
