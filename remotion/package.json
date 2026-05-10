@@ -1,0 +1,22 @@
+{
+  "name": "skillpips-video",
+  "version": "1.0.0",
+  "description": "SKILLPIPS Cinematic Ad — Remotion video project",
+  "remotionEntry": "src/index.tsx",
+  "scripts": {
+    "start": "remotion studio",
+    "render": "remotion render SkillpipsAd out/skillpips-ad.mp4 --codec=h264",
+    "render:prores": "remotion render SkillpipsAd out/skillpips-ad.mov --codec=prores"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "remotion": "^4.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}
