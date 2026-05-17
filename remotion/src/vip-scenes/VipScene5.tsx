@@ -236,7 +236,7 @@ export const VipScene5: React.FC = () => {
 
   /* ── Divider line ─────────────────────────────────── */
   const dividerW = interpolate(frame, [145, 180], [0, WIDTH * 0.55], {
-    easing: Easing.out(Easing.expo),
+    easing: Easing.out(Easing.exp),
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });

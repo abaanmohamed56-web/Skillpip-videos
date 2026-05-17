@@ -115,7 +115,7 @@ const AccentLines: React.FC<{ frame: number; startF: number; endF: number; alpha
     extrapolateRight: "clamp",
   });
   const w = interpolate(frame - startF, [20, 55], [0, WIDTH * 0.28], {
-    easing: Easing.out(Easing.expo),
+    easing: Easing.out(Easing.exp),
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
