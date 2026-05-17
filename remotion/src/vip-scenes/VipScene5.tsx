@@ -8,6 +8,7 @@ import {
 import { GOLD, GOLD_B, FONT, WIDTH, HEIGHT } from "../constants";
 import { Particles } from "../components/Particles";
 import { CandleChart } from "../components/CandleChart";
+import { SkillPipsLogo } from "../components/SkillPipsLogo";
 
 /* ─────────────────────────────────────────────────────────
    SCENE 5 — Final Drop  (480 frames / 8 s)
@@ -359,47 +360,17 @@ export const VipScene5: React.FC = () => {
           JOIN THE ELITE
         </div>
 
-        {/* Skill Pips wordmark logo */}
-        <div
+        {/* Skill Pips crest logo */}
+        <SkillPipsLogo
+          size={WIDTH * 0.48}
+          uid="sp5logo"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 8,
             opacity: logoOp,
             transform: `scale(${logoScale})`,
-            marginTop: HEIGHT * 0.02,
+            marginTop: HEIGHT * 0.015,
+            filter: `drop-shadow(0 0 ${WIDTH * 0.045}px rgba(212,175,55,${0.65 * breathe * logoOp}))`,
           }}
-        >
-          <div
-            style={{
-              fontFamily: FONT,
-              fontSize: WIDTH * 0.042,
-              fontWeight: 900,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              background: `linear-gradient(135deg, ${GOLD}, ${GOLD_B}, ${GOLD})`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              filter: `drop-shadow(0 0 ${WIDTH * 0.04}px rgba(212,175,55,${0.8 * breathe}))`,
-            }}
-          >
-            SKILL PIPS
-          </div>
-          <div
-            style={{
-              fontFamily: FONT,
-              fontSize: WIDTH * 0.017,
-              fontWeight: 300,
-              letterSpacing: "0.42em",
-              textTransform: "uppercase",
-              color: `rgba(212,175,55,0.52)`,
-            }}
-          >
-            Signals · Analysis · Community
-          </div>
-        </div>
+        />
       </AbsoluteFill>
 
       {/* ── Impact flash overlay ──────────────────────── */}

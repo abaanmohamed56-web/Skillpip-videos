@@ -8,6 +8,7 @@ import {
 import { GOLD, GOLD_B, GOLD_DARK, FONT, WIDTH, HEIGHT } from "../constants";
 import { CandleChart } from "../components/CandleChart";
 import { Particles } from "../components/Particles";
+import { SkillPipsLogo } from "../components/SkillPipsLogo";
 
 /* ─────────────────────────────────────────────────────────
    SCENE 2 — Fast Montage  (480 frames / 8 s)
@@ -639,45 +640,17 @@ export const VipScene2: React.FC = () => {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              gap: HEIGHT * 0.025,
             }}
           >
-            {/* SKILL PIPS */}
-            <div
+            <SkillPipsLogo
+              size={WIDTH * 0.62}
+              uid="sp2logo"
               style={{
-                fontFamily: FONT,
-                fontSize: WIDTH * 0.1,
-                fontWeight: 900,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                background: `linear-gradient(135deg, #B8962E 0%, ${GOLD} 25%, ${GOLD_B} 50%, ${GOLD} 75%, #8B6914 100%)`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                filter: `drop-shadow(0 0 ${WIDTH * 0.06}px rgba(212,175,55,${
-                  0.85 * logoPulse
-                })) drop-shadow(0 0 ${WIDTH * 0.15}px rgba(212,175,55,0.3))`,
                 opacity: logoAlpha,
                 transform: `scale(${logoScale})`,
+                filter: `drop-shadow(0 0 ${WIDTH * 0.055}px rgba(212,175,55,${0.7 * logoPulse}))`,
               }}
-            >
-              SKILL PIPS
-            </div>
-
-            {/* Tagline */}
-            <div
-              style={{
-                fontFamily: FONT,
-                fontSize: WIDTH * 0.024,
-                fontWeight: 300,
-                letterSpacing: "0.45em",
-                textTransform: "uppercase",
-                color: `rgba(212,175,55,${0.65 * logoAlpha})`,
-                textShadow: `0 0 16px rgba(212,175,55,0.5)`,
-              }}
-            >
-              Signals · Analysis · Community
-            </div>
+            />
           </AbsoluteFill>
         </>
       )}

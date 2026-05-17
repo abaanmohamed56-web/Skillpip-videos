@@ -7,6 +7,7 @@ import {
 } from "remotion";
 import { GOLD, GOLD_B, FONT, WIDTH, HEIGHT } from "../constants";
 import { Particles } from "../components/Particles";
+import { SkillPipsLogo } from "../components/SkillPipsLogo";
 
 /* ─────────────────────────────────────────────────────────
    SCENE 4 — The Tease  (480 frames / 8 s)
@@ -202,21 +203,16 @@ export const VipScene4: React.FC = () => {
           gap: HEIGHT * 0.04,
         }}
       >
-        {/* Label above */}
+        {/* Logo above VIP 2.0 */}
         {frame > 220 && (
-          <div
+          <SkillPipsLogo
+            size={WIDTH * 0.28}
+            uid="sp4logo"
             style={{
-              fontFamily: FONT,
-              fontSize: WIDTH * 0.022,
-              fontWeight: 400,
-              letterSpacing: "0.52em",
-              textTransform: "uppercase",
-              color: `rgba(212,175,55,${0.45 * vipGlowSettle})`,
-              opacity: vipGlowSettle,
+              opacity: vipGlowSettle * 0.88,
+              filter: `drop-shadow(0 0 ${WIDTH * 0.035}px rgba(212,175,55,${0.55 * vipGlowSettle}))`,
             }}
-          >
-            SKILL PIPS
-          </div>
+          />
         )}
 
         {/* VIP 2.0 — before scan (shadow) */}
