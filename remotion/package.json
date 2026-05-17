@@ -6,7 +6,9 @@
   "scripts": {
     "start": "remotion studio",
     "render": "remotion render SkillpipsAd out/skillpips-ad.mp4 --codec=h264",
-    "render:prores": "remotion render SkillpipsAd out/skillpips-ad.mov --codec=prores"
+    "render:prores": "remotion render SkillpipsAd out/skillpips-ad.mov --codec=prores",
+    "render:vip": "remotion render VipTrailer out/vip-trailer.mp4 --codec=h264",
+    "render:vip:prores": "remotion render VipTrailer out/vip-trailer.mov --codec=prores"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",
