@@ -28,7 +28,7 @@ export const SkillPipsLogo: React.FC<{
       viewBox="0 0 400 448"
       width={size}
       height={Math.round((size * 448) / 400)}
-      style={{ display: "block", overflow: "visible", ...style }}
+      style={{ display: "block", overflow: "visible", background: "transparent", ...style }}
     >
       <defs>
         <clipPath id={clip}>
