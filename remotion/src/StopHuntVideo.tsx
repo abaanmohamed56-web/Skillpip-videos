@@ -67,20 +67,6 @@ const Subtitles: React.FC = () => {
   );
 };
 
-const CinematicBars: React.FC = () => {
-  const frame = useCurrentFrame();
-  const h = interpolate(frame, [10, 60], [0, HEIGHT * 0.042], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  return (
-    <>
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: h, background: "#000", zIndex: 40 }} />
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: h, background: "#000", zIndex: 40 }} />
-    </>
-  );
-};
-
 export const StopHuntVideo: React.FC = () => (
   <AbsoluteFill style={{ background: "#000" }}>
     <Sequence from={SH_SCENES.S1.from} durationInFrames={SH_SCENES.S1.duration + FADE}>
@@ -107,7 +93,6 @@ export const StopHuntVideo: React.FC = () => (
       <StopHuntScene6 />
     </Sequence>
 
-    <CinematicBars />
     <Subtitles />
   </AbsoluteFill>
 );

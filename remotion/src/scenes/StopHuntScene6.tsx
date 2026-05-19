@@ -2,49 +2,6 @@ import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { GOLD, GOLD_B, FONT, WIDTH, HEIGHT, RED } from "../constants";
 import { Particles } from "../components/Particles";
-import { CandleChart } from "../components/CandleChart";
-
-// Volumetric light rays rotating around center
-const VolumetricBeams: React.FC<{ frame: number; alpha: number }> = ({ frame, alpha }) => {
-  const beams = Array.from({ length: 6 }, (_, i) => {
-    const angle = (i / 6) * Math.PI * 2 + frame * 0.0015;
-    const cx = WIDTH * 0.5, cy = HEIGHT * 0.36;
-    const len = HEIGHT * 0.58;
-    return {
-      x2: cx + Math.cos(angle) * len,
-      y2: cy + Math.sin(angle) * len,
-      a: alpha * (0.55 + 0.45 * Math.sin(frame * 0.025 + i)),
-      sw: 20 + 8 * Math.sin(frame * 0.018 + i * 0.8),
-      id: `sh6-vb-${i}`,
-    };
-  });
-
-  return (
-    <AbsoluteFill style={{ pointerEvents: "none", mixBlendMode: "screen" }}>
-      <svg width={WIDTH} height={HEIGHT} style={{ position: "absolute", inset: 0 }}>
-        <defs>
-          {beams.map((b) => (
-            <linearGradient key={b.id} id={b.id}
-              x1={WIDTH * 0.5} y1={HEIGHT * 0.36}
-              x2={b.x2} y2={b.y2}
-              gradientUnits="userSpaceOnUse">
-              <stop offset="0%"   stopColor={`rgba(212,175,55,${b.a})`} />
-              <stop offset="100%" stopColor="rgba(212,175,55,0)" />
-            </linearGradient>
-          ))}
-        </defs>
-        {beams.map((b) => (
-          <line key={b.id}
-            x1={WIDTH * 0.5} y1={HEIGHT * 0.36}
-            x2={b.x2} y2={b.y2}
-            stroke={`url(#${b.id})`}
-            strokeWidth={b.sw}
-          />
-        ))}
-      </svg>
-    </AbsoluteFill>
-  );
-};
 
 // Animated comment bubble bouncing up
 const CommentBubble: React.FC<{ delay: number; x: number; frame: number }> = ({ delay, x, frame }) => {
@@ -69,7 +26,6 @@ const CommentBubble: React.FC<{ delay: number; x: number; frame: number }> = ({ 
 export const StopHuntScene6: React.FC = () => {
   const frame = useCurrentFrame();
 
-  const beamProg = Math.min(frame / 240, 1);
   const glowPulse = 0.038 + 0.016 * Math.sin(frame * 0.04);
 
   const s = (start: number, dur = 60) => ({
@@ -88,15 +44,9 @@ export const StopHuntScene6: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: "#020204" }}>
-      {/* Background candlestick chart (very dim) */}
-      <CandleChart x={0} y={HEIGHT * 0.06} width={WIDTH} height={HEIGHT * 0.36} alpha={0.04} speed={0.55} seed={7} />
-
-      {/* Volumetric beams */}
-      <VolumetricBeams frame={frame} alpha={beamProg * 0.9} />
-
       {/* Gold ambient glow */}
       <AbsoluteFill style={{
-        background: `radial-gradient(ellipse 100% 42% at 50% 58%, rgba(212,175,55,${glowPulse * beamProg}) 0%, transparent 68%)`,
+        background: `radial-gradient(ellipse 100% 42% at 50% 58%, rgba(212,175,55,${glowPulse}) 0%, transparent 68%)`,
         mixBlendMode: "screen",
         pointerEvents: "none",
       }} />
