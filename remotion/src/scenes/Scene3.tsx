@@ -1,226 +1,212 @@
+/**
+ * Scene 3 (12–20 s) — Hero Section Zoom
+ * Camera slowly pushes in on the hero section.
+ * Individual UI elements animate out with staggered spring reveals.
+ */
 import React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { FONT, WIDTH } from "../constants";
-import { Background } from "../components/Background";
-import { Phone } from "../components/Phone";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame } from "remotion";
+import { FONT, FPS, GOLD, GOLD_B, GOLD_LIGHT, WIDTH, HEIGHT, SITE } from "../constants";
+import { WebsitePanel } from "../components/WebsitePanel";
+import { GlassCard } from "../components/GlassCard";
+import { Particles } from "../components/Particles";
+import { Vignette } from "../effects/Vignette";
+import { LensFlare } from "../effects/LensFlare";
 
-/* iOS-accurate Telegram app icon — blue rounded square + SVG paper plane */
-const TelegramIcon: React.FC<{ size: number }> = ({ size }) => (
-  <div
-    style={{
-      width: size, height: size,
-      borderRadius: size * 0.22,
-      background: "linear-gradient(180deg, #37AEE2 0%, #1E96C8 100%)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      flexShrink: 0,
-      boxShadow: "0 1px 4px rgba(0,0,0,0.35)",
-    }}
-  >
-    <svg width={size * 0.62} height={size * 0.62} viewBox="0 0 24 24" fill="none">
-      <path
-        d="M2.29 11.4L21.13 4.06C21.97 3.74 22.77 4.55 22.44 5.39L18.14 19.47C17.8 20.37 16.63 20.53 16.06 19.75L12.3 14.71L9.42 17.47C8.88 17.99 8 17.61 8 16.87V13.5L2.37 12.58C1.48 12.43 1.43 11.75 2.29 11.4Z"
-        fill="#fff"
-      />
-    </svg>
-  </div>
-);
-
-const Notif: React.FC<{
-  opacity: number; ty: number; msg: string;
-  phoneW: number;
-}> = ({ opacity, ty, msg, phoneW }) => {
-  const fs = phoneW * 0.028;
-  const iconSize = phoneW * 0.082;
-  return (
-    <div
-      style={{
-        background: "rgba(28,28,30,0.88)",
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: phoneW * 0.038,
-        padding: `${phoneW * 0.022}px ${phoneW * 0.028}px`,
-        display: "flex",
-        alignItems: "center",
-        gap: phoneW * 0.022,
-        opacity,
-        transform: `translateY(${ty}px)`,
-        fontFamily: FONT,
-      }}
-    >
-      <TelegramIcon size={iconSize} />
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
-          <div style={{ fontSize: fs * 0.8, fontWeight: 600, color: "#fff" }}>SKILLPIPS</div>
-          <div style={{ fontSize: fs * 0.68, color: "rgba(255,255,255,0.42)" }}>now</div>
-        </div>
-        <div style={{ fontSize: fs * 0.75, color: "rgba(255,255,255,0.68)", lineHeight: 1.3 }}>{msg}</div>
-      </div>
-    </div>
-  );
-};
+const PANEL_W = WIDTH;
+const PANEL_H = PANEL_W * 0.694;
 
 export const Scene3: React.FC = () => {
   const frame = useCurrentFrame();
 
-  const floatY  = Math.sin(frame * 0.02) * 9;
-  const floatRX = Math.sin(frame * 0.02) * 2;
+  /* ── Camera zoom ── */
+  const zoomSc = interpolate(
+    frame,
+    [0, 180],
+    [0.72, 1.12],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const zoomX = interpolate(frame, [0, 180], [0,  WIDTH * 0.05],  { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const zoomY = interpolate(frame, [0, 180], [0, -HEIGHT * 0.03], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  /* Notifications appear at 1.6 s and 3.3 s into the scene */
-  const n1p = interpolate(frame, [96, 126], [0, 1],  { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const n2p = interpolate(frame, [198, 228], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  /* ── Panel opacity: already fully visible from Scene 2 ── */
+  const panelOp = interpolate(frame, [0, 18], [0.88, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const PHONE_W = WIDTH * 0.62;
-  const fs = PHONE_W * 0.028;
+  /* ── Floating stat cards reveal (staggered) ── */
+  const sp = (delay: number) =>
+    spring({ frame: Math.max(0, frame - delay), fps: FPS, config: { stiffness: 60, damping: 14 } });
+
+  const card1 = sp(50);
+  const card2 = sp(75);
+  const card3 = sp(100);
+
+  /* ── Depth-of-field blur on edges ── */
+  const dofBlur = interpolate(frame, [100, 180], [0, 2.5], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  /* ── Text lines ── */
+  const makeText = (start: number) => ({
+    op: interpolate(frame, [start, start + 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+    y:  interpolate(frame, [start, start + 30], [14, 0],  { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+  });
+  const t1 = makeText(70);
+  const t2 = makeText(110);
+  const t3 = makeText(150);
+
+  /* ── Lens flare intensity ── */
+  const flareOp = interpolate(frame, [80, 140], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  const cardStyle = (prog: number): React.CSSProperties => ({
+    opacity:   prog,
+    transform: `scale(${0.72 + prog * 0.28}) translateY(${(1 - prog) * 28}px)`,
+  });
 
   return (
-    <AbsoluteFill style={{ background: "#000" }}>
-      <Background chartAlpha={0.08} particleSpeed={0.70} showGlow glowY={0.44} />
-
+    <AbsoluteFill style={{ background: "#050507", overflow: "hidden" }}>
+      {/* ── Zoomed website panel ── */}
       <AbsoluteFill
-        style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          filter: `blur(${dofBlur}px)`,
+        }}
       >
-        <Phone
-          width={PHONE_W}
-          style={{ transform: `translateY(${floatY}px) rotateX(${floatRX}deg)` }}
+        <div
+          style={{
+            opacity: panelOp,
+            transform: `scale(${zoomSc}) translate(${zoomX}px, ${zoomY}px)`,
+          }}
         >
-          {/* iOS lock screen with trading chart wallpaper */}
+          <WebsitePanel
+            width={PANEL_W}
+            scrollY={0}
+            showSections={["hero"]}
+            clipHeight={PANEL_H}
+          />
+        </div>
+      </AbsoluteFill>
+
+      {/* ── Dark overlay to create focal plane ── */}
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(ellipse 70% 65% at 42% 52%, transparent 28%, rgba(0,0,0,${0.55 * (frame / 240)}) 70%, rgba(0,0,0,0.8) 100%)`,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* ── Floating stat cards (float out from the panel) ── */}
+      {/* Win Rate card */}
+      <div
+        style={{
+          position: "absolute",
+          left: WIDTH * 0.04,
+          top: HEIGHT * 0.22,
+          zIndex: 10,
+          ...cardStyle(card1),
+        }}
+      >
+        <GlassCard
+          padding={`${HEIGHT * 0.022}px ${WIDTH * 0.025}px`}
+          borderRadius={14}
+          borderColor="rgba(74,222,128,0.3)"
+          style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.7), 0 0 20px rgba(74,222,128,0.1)" }}
+        >
+          <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.009, fontWeight: 600, color: "rgba(255,255,255,0.48)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 4 }}>Win Rate</div>
+          <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.038, fontWeight: 800, letterSpacing: "-0.02em", background: `linear-gradient(135deg, #4ade80 0%, #22d3ee 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>89.3%</div>
+          <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.0082, color: "rgba(255,255,255,0.38)", marginTop: 3 }}>Last 90 days · verified</div>
+        </GlassCard>
+      </div>
+
+      {/* Total Pips card */}
+      <div
+        style={{
+          position: "absolute",
+          right: WIDTH * 0.04,
+          top: HEIGHT * 0.15,
+          zIndex: 10,
+          ...cardStyle(card2),
+        }}
+      >
+        <GlassCard
+          padding={`${HEIGHT * 0.022}px ${WIDTH * 0.025}px`}
+          borderRadius={14}
+          borderColor="rgba(212,175,55,0.32)"
+          style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.7), 0 0 20px rgba(212,175,55,0.12)" }}
+        >
+          <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.009, fontWeight: 600, color: "rgba(255,255,255,0.48)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 4 }}>Total Pips 2025</div>
+          <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.038, fontWeight: 800, letterSpacing: "-0.02em", background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_B} 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>+12,840</div>
+          <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.0082, color: "rgba(255,255,255,0.38)", marginTop: 3 }}>Across all verified trades</div>
+        </GlassCard>
+      </div>
+
+      {/* Members card */}
+      <div
+        style={{
+          position: "absolute",
+          right: WIDTH * 0.04,
+          bottom: HEIGHT * 0.22,
+          zIndex: 10,
+          ...cardStyle(card3),
+        }}
+      >
+        <GlassCard
+          padding={`${HEIGHT * 0.022}px ${WIDTH * 0.025}px`}
+          borderRadius={14}
+          borderColor="rgba(212,175,55,0.22)"
+          style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.7)" }}
+        >
+          <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.009, fontWeight: 600, color: "rgba(255,255,255,0.48)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 4 }}>VIP Members</div>
+          <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.038, fontWeight: 800, letterSpacing: "-0.02em", color: "#fff" }}>847+</div>
+          <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.0082, color: "rgba(255,255,255,0.38)", marginTop: 3 }}>Traders trading live</div>
+        </GlassCard>
+      </div>
+
+      {/* ── Scene text lines ── */}
+      <AbsoluteFill
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          paddingLeft: WIDTH * 0.06,
+          paddingTop: HEIGHT * 0.05,
+          gap: HEIGHT * 0.005,
+          pointerEvents: "none",
+          zIndex: 20,
+        }}
+      >
+        {[
+          { t: t1, text: "Professional analysis.", size: WIDTH * 0.028, weight: 300 },
+          { t: t2, text: "Actionable signals.",     size: WIDTH * 0.028, weight: 300 },
+          { t: t3, text: "Real results.",           size: WIDTH * 0.034, weight: 700 },
+        ].map(({ t, text, size, weight }) => (
           <div
+            key={text}
             style={{
-              width: "100%", height: "100%",
-              position: "relative",
-              display: "flex", flexDirection: "column",
-              overflow: "hidden",
+              fontFamily: FONT,
+              fontSize: size,
+              fontWeight: weight,
+              color: text === "Real results." ? GOLD_B : "rgba(255,255,255,0.82)",
+              letterSpacing: "0.04em",
+              opacity: t.op,
+              transform: `translateY(${t.y}px)`,
+              textShadow: "0 2px 16px rgba(0,0,0,0.95)",
+              filter: text === "Real results." ? `drop-shadow(0 0 12px rgba(212,175,55,0.5))` : "none",
             }}
           >
-            {/* Trading chart wallpaper — dark SVG with candles and glow */}
-            <svg
-              width="100%" height="100%"
-              viewBox="0 0 100 180"
-              preserveAspectRatio="xMidYMid slice"
-              style={{ position: "absolute", inset: 0 }}
-            >
-              <defs>
-                <linearGradient id="wbg" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#0a0f1a" />
-                  <stop offset="100%" stopColor="#060b14" />
-                </linearGradient>
-                <linearGradient id="wglow" x1="0" y1="1" x2="0" y2="0">
-                  <stop offset="0%" stopColor="rgba(212,175,55,0)" />
-                  <stop offset="60%" stopColor="rgba(212,175,55,0.12)" />
-                  <stop offset="100%" stopColor="rgba(212,175,55,0)" />
-                </linearGradient>
-                <filter id="wf">
-                  <feGaussianBlur stdDeviation="1.2" />
-                </filter>
-              </defs>
-              <rect width="100" height="180" fill="url(#wbg)" />
-              {/* Grid lines */}
-              {[40, 60, 80, 100, 120, 140].map(y => (
-                <line key={y} x1="0" y1={y} x2="100" y2={y} stroke="rgba(255,255,255,0.04)" strokeWidth="0.4" />
-              ))}
-              {[20, 40, 60, 80].map(x => (
-                <line key={x} x1={x} y1="0" x2={x} y2="180" stroke="rgba(255,255,255,0.04)" strokeWidth="0.4" />
-              ))}
-              {/* Glowing MA line */}
-              <polyline
-                points="0,130 10,125 18,122 25,118 32,115 40,108 48,104 55,98 62,94 70,88 78,84 88,78 100,72"
-                fill="none" stroke="rgba(212,175,55,0.5)" strokeWidth="0.8"
-              />
-              <polyline
-                points="0,130 10,125 18,122 25,118 32,115 40,108 48,104 55,98 62,94 70,88 78,84 88,78 100,72"
-                fill="none" stroke="rgba(212,175,55,0.25)" strokeWidth="2.5" filter="url(#wf)"
-              />
-              {/* Candles */}
-              {[
-                { x: 4,  o: 128, c: 122, h: 130, l: 120 },
-                { x: 12, o: 122, c: 126, h: 127, l: 119 },
-                { x: 20, o: 126, c: 118, h: 128, l: 116 },
-                { x: 28, o: 118, c: 112, h: 120, l: 110 },
-                { x: 36, o: 112, c: 108, h: 114, l: 106 },
-                { x: 44, o: 108, c: 102, h: 110, l: 100 },
-                { x: 52, o: 102, c: 106, h: 108, l: 100 },
-                { x: 60, o: 106, c: 96,  h: 108, l: 94  },
-                { x: 68, o: 96,  c: 90,  h: 98,  l: 88  },
-                { x: 76, o: 90,  c: 85,  h: 92,  l: 83  },
-                { x: 84, o: 85,  c: 80,  h: 87,  l: 78  },
-                { x: 92, o: 80,  c: 76,  h: 82,  l: 74  },
-              ].map((cd) => {
-                const isUp = cd.c < cd.o;
-                const col = isUp ? "#4ade80" : "#ef5350";
-                return (
-                  <g key={cd.x} opacity="0.7">
-                    <line x1={cd.x + 2} y1={cd.h} x2={cd.x + 2} y2={cd.l} stroke={col} strokeWidth="0.5" />
-                    <rect
-                      x={cd.x} y={Math.min(cd.o, cd.c)}
-                      width={4} height={Math.max(Math.abs(cd.o - cd.c), 1)}
-                      fill={col}
-                    />
-                  </g>
-                );
-              })}
-              {/* Glow overlay from bottom */}
-              <rect x="0" y="0" width="100" height="180" fill="url(#wglow)" />
-              {/* Darken top/bottom for readability */}
-              <rect x="0" y="0" width="100" height="45" fill="rgba(0,0,0,0.55)" />
-              <rect x="0" y="110" width="100" height="70" fill="rgba(0,0,0,0.4)" />
-            </svg>
-            {/* Status bar */}
-            <div
-              style={{
-                display: "flex", justifyContent: "space-between",
-                padding: `${PHONE_W * 0.038}px ${PHONE_W * 0.05}px ${PHONE_W * 0.014}px`,
-                paddingTop: PHONE_W * 0.09,
-                fontSize: fs * 0.78, fontWeight: 600, color: "#fff", fontFamily: FONT,
-              }}
-            >
-              <span>9:41</span>
-              <span style={{ width: "34%" }} />
-              <span>●●● 5G ▌</span>
-            </div>
-
-            {/* Clock */}
-            <div
-              style={{
-                display: "flex", flexDirection: "column",
-                alignItems: "center", marginTop: "6%", gap: 4,
-              }}
-            >
-              <div
-                style={{
-                  fontSize: PHONE_W * 0.072, fontWeight: 100, color: "#fff",
-                  letterSpacing: "-0.02em", fontFamily: FONT,
-                }}
-              >
-                9:41
-              </div>
-              <div style={{ fontSize: fs * 0.78, color: "rgba(255,255,255,0.52)", fontFamily: FONT }}>
-                Saturday, May 10
-              </div>
-            </div>
-
-            {/* Notifications */}
-            <div
-              style={{
-                display: "flex", flexDirection: "column",
-                gap: PHONE_W * 0.018,
-                padding: `${PHONE_W * 0.04}px ${PHONE_W * 0.022}px`,
-              }}
-            >
-              <Notif
-                opacity={n1p} ty={(1 - n1p) * -18}
-                msg="🔔 SIGNAL READY — XAUUSD"
-                phoneW={PHONE_W}
-              />
-              <Notif
-                opacity={n2p} ty={(1 - n2p) * -18}
-                msg="XAUUSD SELL CONFIRMED ✓"
-                phoneW={PHONE_W}
-              />
-            </div>
+            {text}
           </div>
-        </Phone>
+        ))}
       </AbsoluteFill>
+
+      {/* Lens flare in top-right */}
+      {flareOp > 0.1 && (
+        <div style={{ opacity: flareOp }}>
+          <LensFlare x={0.82} y={0.18} intensity={0.55} size={WIDTH * 0.18} />
+        </div>
+      )}
+
+      <Vignette strength={0.72} />
+      <Particles count={60} speedMult={0.3} opacity={0.35} />
     </AbsoluteFill>
   );
 };

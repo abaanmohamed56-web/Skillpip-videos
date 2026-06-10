@@ -1,112 +1,190 @@
+/**
+ * Scene 2 (5–12 s) — Website Floating in 3-D Space
+ * The SkillPips website homepage appears floating in dark space.
+ * Camera orbits slowly around the UI with a reflection below.
+ */
 import React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
-import { GOLD, FONT, WIDTH, HEIGHT } from "../constants";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame } from "remotion";
+import { FONT, FPS, GOLD, GOLD_B, WIDTH, HEIGHT } from "../constants";
 import { Background } from "../components/Background";
-import { Phone } from "../components/Phone";
-import { TradingScreen } from "../components/TradingScreen";
+import { Particles } from "../components/Particles";
+import { WebsitePanel } from "../components/WebsitePanel";
+import { Vignette } from "../effects/Vignette";
 
 export const Scene2: React.FC = () => {
   const frame = useCurrentFrame();
+  const dur = 210;
 
-  /* ── Phone 3-D reveal — Apple-style rise from below ── */
-  const phoneOpacity = interpolate(frame, [0, 36], [0, 1], { extrapolateRight: "clamp" });
-  /* Start nearly face-on, tilted slightly left, rise up smoothly */
-  const rotY  = interpolate(frame, [0, 60, 150, 260, 360], [-22, -16, 6, -4, -3], { extrapolateRight: "clamp" });
-  const rotX  = interpolate(frame, [0, 60, 150, 260, 360], [14,   8, -3,  2,  2], { extrapolateRight: "clamp" });
-  const tY    = interpolate(frame, [0, 60, 150, 260, 360], [90,  50,  0,  0,  0], { extrapolateRight: "clamp" });
-  const scale = interpolate(frame, [0, 60, 150, 260, 360], [0.88, 0.95, 1.02, 1, 1], { extrapolateRight: "clamp" });
+  /* ── Website panel enter ── */
+  const panelOp = interpolate(frame, [0, 25], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const panelSc = spring({ frame, fps: FPS, config: { stiffness: 45, damping: 16 } });
+  const scale   = 0.62 + panelSc * 0.12; // 0.62 → 0.74
 
-  /* ── Gold sweep ── */
-  const sweepOffset = ((frame * 0.8) % 100) / 100;
+  /* ── Camera orbit ── */
+  const rotY  = interpolate(frame, [0, dur], [28, -8],  { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const rotX  = interpolate(frame, [0, dur], [5, 2],    { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const tilt  = Math.sin(frame * 0.012) * 0.4; // gentle bob
 
-  /* ── Holographic cards ── */
-  const holoP = (delay: number) =>
-    interpolate(frame, [delay, delay + 36], [0, 1], {
-      extrapolateLeft: "clamp", extrapolateRight: "clamp",
-    });
+  /* ── Reflection fade-in ── */
+  const reflOp = interpolate(frame, [20, 70], [0, 0.18], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  /* ── Lens flare ── */
-  const flareP = interpolate(frame, [48, 216], [0, 1], {
-    extrapolateLeft: "clamp", extrapolateRight: "clamp",
-  });
+  /* ── Highlight ring animations ── */
+  const h1Op = interpolate(frame, [45, 75],  [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const h2Op = interpolate(frame, [80, 110], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const h3Op = interpolate(frame, [115, 145],[0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const PHONE_W = WIDTH * 0.62;
+  /* ── Text reveal ── */
+  const textOp = interpolate(frame, [90, 125], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const textY  = interpolate(frame, [90, 125], [16, 0],  { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const holos = [
-    { delay: 96,  pos: { top: "16%",    right: "3%" }, label: "XAUUSD",  val: "▲ 3,340.20", valCol: "#4ade80", sub: "+1.24% today"   },
-    { delay: 129, pos: { top: "44%",    left:  "3%" }, label: "SIGNAL",  val: "● SELL",      valCol: "#f87171", sub: "TP: 200 pips"   },
-    { delay: 162, pos: { bottom: "16%", right: "3%" }, label: "MEMBERS", val: "1,000+",      valCol: "#fff",    sub: "active traders" },
-  ];
+  const PANEL_W = WIDTH * 0.74;
+  const PANEL_H = PANEL_W * 0.694; // 1440:1000 aspect
+  const cx = WIDTH / 2;
+  const cy = HEIGHT / 2;
 
   return (
     <AbsoluteFill style={{ background: "#000" }}>
-      <Background chartAlpha={0.10} particleSpeed={0.80} showGlow glowY={0.46} />
+      <Background gridOpacity={0.022} goldGlow glowIntensity={0.08} />
+      <Particles count={140} speedMult={0.42} opacity={0.6} />
 
-      {/* Phone */}
+      {/* ── Panel + reflection in 3-D stage ── */}
       <AbsoluteFill
         style={{
-          display: "flex", alignItems: "center", justifyContent: "center",
-          perspective: "1200px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          perspective: `${WIDTH * 1.6}px`,
         }}
       >
         <div
           style={{
-            opacity: phoneOpacity,
-            transform: `perspective(1200px) rotateY(${rotY}deg) rotateX(${rotX}deg) translateY(${tY}px) scale(${scale})`,
+            opacity: panelOp,
+            transform: `rotateY(${rotY}deg) rotateX(${rotX + tilt}deg) scale(${scale})`,
+            transformStyle: "preserve-3d",
+            position: "relative",
           }}
         >
-          <Phone width={PHONE_W} showSweep sweepOffset={sweepOffset}>
-            <TradingScreen width={PHONE_W} height={PHONE_W * 2.165} />
-          </Phone>
+          {/* Main panel */}
+          <WebsitePanel
+            width={PANEL_W}
+            scrollY={0}
+            showSections={["hero"]}
+            clipHeight={PANEL_H}
+          />
+
+          {/* Reflection */}
+          <div
+            style={{
+              position: "absolute",
+              top: PANEL_H + 2,
+              left: 0,
+              width: PANEL_W,
+              height: PANEL_H * 0.35,
+              overflow: "hidden",
+              opacity: reflOp,
+              transform: "scaleY(-1)",
+              WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 80%)",
+              maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 80%)",
+            }}
+          >
+            <WebsitePanel
+              width={PANEL_W}
+              scrollY={0}
+              showSections={["hero"]}
+              clipHeight={PANEL_H}
+            />
+          </div>
+
+          {/* Ground shadow */}
+          <div
+            style={{
+              position: "absolute",
+              top: PANEL_H + PANEL_H * 0.35 + 8,
+              left: PANEL_W * 0.1,
+              width: PANEL_W * 0.8,
+              height: PANEL_W * 0.04,
+              background: "radial-gradient(ellipse, rgba(212,175,55,0.18) 0%, transparent 70%)",
+              filter: "blur(20px)",
+            }}
+          />
         </div>
       </AbsoluteFill>
 
-      {/* Lens flare */}
-      {flareP > 0.2 && (
+      {/* ── Section highlight rings ── */}
+      {/* Signal widget highlight */}
+      <div
+        style={{
+          position: "absolute",
+          right: WIDTH * 0.155,
+          top: HEIGHT * 0.275,
+          width: WIDTH * 0.155,
+          height: HEIGHT * 0.32,
+          border: `1px solid rgba(212,175,55,${0.65 * h1Op})`,
+          borderRadius: 12,
+          boxShadow: `0 0 20px rgba(212,175,55,${0.22 * h1Op}), inset 0 0 15px rgba(212,175,55,${0.06 * h1Op})`,
+          opacity: h1Op,
+          pointerEvents: "none",
+        }}
+      />
+      {/* Stats bar highlight */}
+      <div
+        style={{
+          position: "absolute",
+          left: WIDTH * 0.133,
+          top: HEIGHT * 0.505,
+          width: WIDTH * 0.28,
+          height: HEIGHT * 0.1,
+          border: `1px solid rgba(255,255,255,${0.22 * h2Op})`,
+          borderRadius: 6,
+          boxShadow: `0 0 14px rgba(255,255,255,${0.08 * h2Op})`,
+          opacity: h2Op,
+          pointerEvents: "none",
+        }}
+      />
+      {/* CTA button highlight */}
+      <div
+        style={{
+          position: "absolute",
+          left: WIDTH * 0.135,
+          top: HEIGHT * 0.63,
+          width: WIDTH * 0.11,
+          height: HEIGHT * 0.068,
+          border: `1px solid rgba(212,175,55,${0.55 * h3Op})`,
+          borderRadius: 5,
+          boxShadow: `0 0 18px rgba(212,175,55,${0.2 * h3Op})`,
+          opacity: h3Op,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* ── Caption text ── */}
+      <AbsoluteFill
+        style={{
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "center",
+          paddingBottom: HEIGHT * 0.14,
+          pointerEvents: "none",
+        }}
+      >
         <div
           style={{
-            position: "absolute",
-            top: "22%", right: "8%",
-            width: PHONE_W * 0.35, height: PHONE_W * 0.35,
-            background: `radial-gradient(circle, rgba(212,175,55,${0.32 * flareP}) 0%, rgba(255,215,0,${0.1 * flareP}) 40%, transparent 70%)`,
-            mixBlendMode: "screen",
-            pointerEvents: "none",
-            borderRadius: "50%",
+            fontFamily: FONT,
+            fontSize: WIDTH * 0.026,
+            fontWeight: 300,
+            letterSpacing: "0.12em",
+            color: "rgba(255,255,255,0.88)",
+            textAlign: "center",
+            opacity: textOp,
+            transform: `translateY(${textY}px)`,
+            textShadow: "0 2px 20px rgba(0,0,0,0.9)",
           }}
-        />
-      )}
+        >
+          Built for serious traders.
+        </div>
+      </AbsoluteFill>
 
-      {/* Holo cards */}
-      {holos.map(({ delay, pos, label, val, valCol, sub }) => {
-        const hp = holoP(delay);
-        return (
-          <div
-            key={label}
-            style={{
-              position: "absolute",
-              ...pos,
-              background: "rgba(4,4,6,0.9)",
-              border: "1px solid rgba(212,175,55,0.5)",
-              borderRadius: WIDTH * 0.028,
-              padding: `${WIDTH * 0.022}px ${WIDTH * 0.028}px`,
-              minWidth: WIDTH * 0.22,
-              opacity: hp,
-              transform: `scale(${0.8 + 0.2 * hp}) translateY(${(1 - hp) * 8}px)`,
-              zIndex: 5,
-            }}
-          >
-            <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.022, color: GOLD, fontWeight: 700, marginBottom: 3, letterSpacing: "0.08em" }}>
-              {label}
-            </div>
-            <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.034, fontWeight: 800, color: valCol }}>
-              {val}
-            </div>
-            <div style={{ fontFamily: FONT, fontSize: WIDTH * 0.02, color: "rgba(255,255,255,0.45)", marginTop: 2 }}>
-              {sub}
-            </div>
-          </div>
-        );
-      })}
+      <Vignette strength={0.68} />
     </AbsoluteFill>
   );
 };

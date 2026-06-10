@@ -1,63 +1,98 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame } from "remotion";
-import { WIDTH, HEIGHT } from "../constants";
-import { Particles } from "./Particles";
-import { CandleChart } from "./CandleChart";
+import { WIDTH, HEIGHT, BG } from "../constants";
 
-interface Props {
-  chartAlpha?: number;
-  particleSpeed?: number;
-  showGlow?: boolean;
-  glowY?: number;   /* 0-1 vertical center of ambient glow */
+interface BackgroundProps {
+  gridOpacity?: number;
+  burgandyOrbs?: boolean;
+  goldGlow?: boolean;
   glowIntensity?: number;
 }
 
-export const Background: React.FC<Props> = ({
-  chartAlpha    = 0.10,
-  particleSpeed = 0.70,
-  showGlow      = false,
-  glowY         = 0.46,
-  glowIntensity = 1,
+export const Background: React.FC<BackgroundProps> = ({
+  gridOpacity = 0.028,
+  burgandyOrbs = true,
+  goldGlow = true,
+  glowIntensity = 0.12,
 }) => {
-  const frame     = useCurrentFrame();
-  const glowPulse = 0.038 + 0.018 * Math.sin(frame * 0.03);
+  const frame = useCurrentFrame();
+  const t = frame * 0.007;
 
   return (
-    <>
-      {/* Candlestick chart layer 1 */}
-      <CandleChart
-        x={0} y={HEIGHT * 0.08}
-        width={WIDTH} height={HEIGHT * 0.38}
-        alpha={chartAlpha} speed={0.65} seed={0}
-      />
-      {/* Candlestick chart layer 2 */}
-      <CandleChart
-        x={0} y={HEIGHT * 0.58}
-        width={WIDTH} height={HEIGHT * 0.28}
-        alpha={chartAlpha * 0.55} speed={0.40} seed={42}
+    <AbsoluteFill style={{ background: BG, overflow: "hidden" }}>
+      {/* Animated burgundy/wine orbs — matching the real website */}
+      {burgandyOrbs && (
+        <>
+          <div
+            style={{
+              position: "absolute",
+              width: WIDTH * 0.7,
+              height: WIDTH * 0.7,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(109,16,36,0.38) 0%, transparent 68%)",
+              top: -WIDTH * 0.18,
+              left: -WIDTH * 0.08,
+              transform: `translate(${Math.sin(t) * 25}px, ${Math.cos(t * 0.6) * 18}px)`,
+              filter: "blur(55px)",
+              pointerEvents: "none",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              width: WIDTH * 0.55,
+              height: WIDTH * 0.55,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(109,16,36,0.28) 0%, transparent 68%)",
+              bottom: -WIDTH * 0.12,
+              right: -WIDTH * 0.06,
+              transform: `translate(${-Math.sin(t * 0.8) * 20}px, ${Math.cos(t * 0.5) * 14}px)`,
+              filter: "blur(45px)",
+              pointerEvents: "none",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              width: WIDTH * 0.35,
+              height: WIDTH * 0.35,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(70,10,25,0.22) 0%, transparent 70%)",
+              top: "35%",
+              right: "15%",
+              transform: `translate(${Math.cos(t * 0.9) * 15}px, ${Math.sin(t * 0.7) * 12}px)`,
+              filter: "blur(35px)",
+              pointerEvents: "none",
+            }}
+          />
+        </>
+      )}
+
+      {/* Subtle gold grid */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: `
+            linear-gradient(rgba(212,175,55,${gridOpacity}) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(212,175,55,${gridOpacity}) 1px, transparent 1px)
+          `,
+          backgroundSize: `${WIDTH * 0.052}px ${HEIGHT * 0.092}px`,
+          pointerEvents: "none",
+        }}
       />
 
-      {/* Gold particles */}
-      <Particles count={180} speedMult={particleSpeed} />
-
-      {/* Ambient glow behind phone */}
-      {showGlow && (
-        <AbsoluteFill
+      {/* Ambient gold glow at bottom */}
+      {goldGlow && (
+        <div
           style={{
-            background: `radial-gradient(ellipse 130% 60% at 50% ${glowY * 100}%, rgba(212,175,55,${glowPulse * glowIntensity}) 0%, transparent 65%)`,
+            position: "absolute",
+            inset: 0,
+            background: `radial-gradient(ellipse 70% 40% at 50% 100%, rgba(212,175,55,${glowIntensity + 0.04 * Math.sin(t)}) 0%, transparent 65%)`,
             pointerEvents: "none",
           }}
         />
       )}
-
-      {/* Vignette */}
-      <AbsoluteFill
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 90% at 50% 50%, transparent 25%, rgba(0,0,0,0.55) 75%, rgba(0,0,0,0.88) 100%)",
-          pointerEvents: "none",
-        }}
-      />
-    </>
+    </AbsoluteFill>
   );
 };

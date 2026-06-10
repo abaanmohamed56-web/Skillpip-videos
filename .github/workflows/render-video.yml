@@ -1,17 +1,16 @@
-name: Render SKILLPIPS Cinematic Ad
+name: Render SKILLPIPS Cinematic Promo
 
 on:
   push:
     branches:
-      - gh-pages
-      - claude/skillpips-cinematic-ad-z75Va
+      - claude/skillpips-promo-video-umu8r8
     paths:
       - "remotion/**"
   workflow_dispatch: # allow manual trigger from GitHub UI
 
 jobs:
   render:
-    name: Render MP4 (1080×1920 · 60fps · 45s)
+    name: Render MP4 (1920×1080 · 30fps · 60s)
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -37,15 +36,15 @@ jobs:
         working-directory: remotion
         run: |
           mkdir -p out
-          npx remotion render SkillpipsAd out/skillpips-ad.mp4 \
+          npx remotion render SkillpipsAd out/skillpips-promo.mp4 \
             --codec=h264 \
-            --jpeg-quality=95 \
+            --jpeg-quality=96 \
             --overwrite \
             --log=verbose
 
       - name: Upload MP4 artifact
         uses: actions/upload-artifact@v4
         with:
-          name: skillpips-ad-mp4
-          path: remotion/out/skillpips-ad.mp4
+          name: skillpips-promo-mp4
+          path: remotion/out/skillpips-promo.mp4
           retention-days: 30
