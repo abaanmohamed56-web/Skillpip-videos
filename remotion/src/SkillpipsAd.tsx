@@ -135,9 +135,10 @@ export const SkillpipsAd: React.FC = () => (
       <Scene7 />
     </Sequence>
 
-    {/* ── Global overlays ── */}
+    {/* ── Global overlays ──
+        <Captions /> is available but disabled: every scene already renders
+        its key text in-frame, so subtitles would duplicate it. */}
     <CinematicBars />
-    <Captions />
     <FilmGrain />
   </AbsoluteFill>
 );
