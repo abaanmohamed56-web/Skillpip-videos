@@ -1,8 +1,13 @@
-// ── Output spec ──────────────────────────────────────────────────────────────
+// ── Output spec — landscape (promo) ──────────────────────────────────────────
 export const FPS      = 30;
 export const WIDTH    = 1920;
 export const HEIGHT   = 1080;
 export const DURATION = 1800; // 60 s × 30 fps
+
+// ── Output spec — vertical (TikTok / Reels / Shorts) ─────────────────────────
+export const TK_WIDTH    = 1080;
+export const TK_HEIGHT   = 1920;
+export const TK_DURATION = 1200; // 40 s × 30 fps
 
 // ── Gold / brand palette ─────────────────────────────────────────────────────
 export const GOLD         = "#D4AF37";

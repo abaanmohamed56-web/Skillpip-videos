@@ -7,7 +7,8 @@
     "start": "remotion studio",
     "render": "remotion render SkillpipsAd out/skillpips-promo.mp4 --codec=h264 --jpeg-quality=96 --overwrite",
     "render:prores": "remotion render SkillpipsAd out/skillpips-promo.mov --codec=prores --overwrite",
-    "render:4k": "remotion render SkillpipsAd out/skillpips-promo-4k.mp4 --codec=h264 --scale=2 --overwrite"
+    "render:4k": "remotion render SkillpipsAd out/skillpips-promo-4k.mp4 --codec=h264 --scale=2 --overwrite",
+    "render:tiktok": "remotion render SkillpipsTikTok out/skillpips-tiktok.mp4 --codec=h264 --jpeg-quality=96 --overwrite"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.0",
