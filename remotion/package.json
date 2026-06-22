@@ -1,22 +1,28 @@
 {
   "name": "skillpips-video",
   "version": "1.0.0",
-  "description": "SKILLPIPS Cinematic Ad — Remotion video project",
+  "description": "Remotion video project — SKILLPIPS Cinematic Ad + Runners motivational TikTok",
   "remotionEntry": "src/index.tsx",
   "scripts": {
     "start": "remotion studio",
     "render": "remotion render SkillpipsAd out/skillpips-ad.mp4 --codec=h264",
-    "render:prores": "remotion render SkillpipsAd out/skillpips-ad.mov --codec=prores"
+    "render:prores": "remotion render SkillpipsAd out/skillpips-ad.mov --codec=prores",
+    "render:runners": "remotion render RunnersTikTok out/runners-tiktok.mp4 --codec=h264",
+    "still:runners": "remotion still RunnersTikTok out/runners-still.png"
   },
   "dependencies": {
-    "@remotion/cli": "^4.0.0",
-    "remotion": "^4.0.0",
+    "@remotion/cli": "4.0.482",
+    "@remotion/three": "4.0.482",
+    "remotion": "4.0.482",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "three": "^0.180.0",
+    "@react-three/fiber": "^8.18.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@types/three": "^0.180.0",
     "typescript": "^5.0.0"
   }
 }
