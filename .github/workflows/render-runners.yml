@@ -39,7 +39,7 @@ jobs:
           mkdir -p out
           npx remotion render RunnersTikTok out/runners-tiktok.mp4 \
             --codec=h264 \
-            --gl=angle \
+            --gl=swangle \
             --jpeg-quality=95 \
             --concurrency=2 \
             --overwrite \
