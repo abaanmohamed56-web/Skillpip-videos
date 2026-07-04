@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aurelia — Luxury Hotel &amp; Resort</title>
+<meta name="description" content="Aurelia Hotel & Resort — a sanctuary of refined luxury, oceanfront suites, and world-class hospitality." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='18' font-size='18'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- NAV -->
+<header class="nav" id="siteNav">
+  <div class="nav__inner container">
+    <a href="#home" class="nav__logo">AURELIA</a>
+    <nav class="nav__links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#rooms">Rooms</a>
+      <a href="#amenities">Amenities</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav__actions">
+      <a href="#booking" class="btn btn--gold btn--sm">Book Now</a>
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="nav__scrim" id="navScrim"></div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero__media">
+    <img src="https://picsum.photos/seed/aurelia-hero-v2/1920/1080" alt="" />
+    <div class="hero__scrim"></div>
+  </div>
+  <div class="hero__content container">
+    <p class="eyebrow reveal">Est. 1998 · Amalfi Coast</p>
+    <h1 class="reveal">Where the Sea<br />Meets Serenity</h1>
+    <p class="hero__sub reveal">An intimate cliffside sanctuary of refined suites, private terraces, and unhurried luxury above the Tyrrhenian Sea.</p>
+    <div class="hero__cta reveal">
+      <a href="#booking" class="btn btn--gold">Reserve Your Stay</a>
+      <a href="#rooms" class="btn btn--ghost">Explore Suites</a>
+    </div>
+  </div>
+  <a href="#about" class="hero__scroll" aria-label="Scroll down">
+    <span></span>
+  </a>
+</section>
+
+<!-- ABOUT / STATS -->
+<section class="about" id="about">
+  <div class="container about__grid">
+    <div class="about__media reveal">
+      <img src="https://picsum.photos/seed/aurelia-lobby-v2/900/1100" alt="Aurelia hotel lobby" loading="lazy" />
+      <div class="about__badge">
+        <strong>25+</strong>
+        <span>Years of Hospitality</span>
+      </div>
+    </div>
+    <div class="about__content">
+      <p class="eyebrow reveal">Our Story</p>
+      <h2 class="reveal">A Legacy Carved<br />Into the Cliffside</h2>
+      <p class="reveal">Aurelia was born from a single idea: that true luxury is quiet. Every suite, every terrace, every handmade detail is designed to slow time down — so you can simply be present with the view, the sea air, and each other.</p>
+      <div class="stats reveal">
+        <div class="stat">
+          <span class="stat__num" data-count="48">0</span>
+          <span class="stat__label">Suites &amp; Villas</span>
+        </div>
+        <div class="stat">
+          <span class="stat__num" data-count="4" data-decimal="9">0</span>
+          <span class="stat__label">Guest Rating</span>
+        </div>
+        <div class="stat">
+          <span class="stat__num" data-count="12">0</span>
+          <span class="stat__label">Awards Won</span>
+        </div>
+        <div class="stat">
+          <span class="stat__num" data-count="100">0</span>
+          <span class="stat__label">% Ocean View</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROOMS -->
+<section class="rooms" id="rooms">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow reveal">Stay With Us</p>
+      <h2 class="reveal">Suites &amp; Residences</h2>
+      <p class="section-head__sub reveal">Each residence is uniquely positioned to frame the coastline — no two views are the same.</p>
+    </div>
+
+    <div class="rooms__grid">
+      <article class="room-card reveal">
+        <div class="room-card__media">
+          <img src="https://picsum.photos/seed/aurelia-room-deluxe/800/560" alt="Deluxe Sea View Room" loading="lazy" />
+          <span class="room-card__tag">Most Booked</span>
+        </div>
+        <div class="room-card__body">
+          <div class="room-card__top">
+            <h3>Deluxe Sea View</h3>
+            <p class="room-card__price">€420<span>/ night</span></p>
+          </div>
+          <p class="room-card__desc">45m² of coastal calm with a private balcony overlooking the bay.</p>
+          <ul class="room-card__amenities">
+            <li>🛏️ King Bed</li>
+            <li>🌊 Sea View</li>
+            <li>🛁 Rain Shower</li>
+          </ul>
+          <a href="#booking" class="room-card__cta">Reserve Suite <span>→</span></a>
+        </div>
+      </article>
+
+      <article class="room-card room-card--featured reveal">
+        <div class="room-card__media">
+          <img src="https://picsum.photos/seed/aurelia-room-penthouse/800/560" alt="Cliffside Penthouse" loading="lazy" />
+          <span class="room-card__tag room-card__tag--gold">Signature</span>
+        </div>
+        <div class="room-card__body">
+          <div class="room-card__top">
+            <h3>Cliffside Penthouse</h3>
+            <p class="room-card__price">€980<span>/ night</span></p>
+          </div>
+          <p class="room-card__desc">A private 120m² residence with infinity plunge pool and panoramic terrace.</p>
+          <ul class="room-card__amenities">
+            <li>🏊 Plunge Pool</li>
+            <li>🍾 Private Butler</li>
+            <li>🔥 Fireplace</li>
+          </ul>
+          <a href="#booking" class="room-card__cta">Reserve Suite <span>→</span></a>
+        </div>
+      </article>
+
+      <article class="room-card reveal">
+        <div class="room-card__media">
+          <img src="https://picsum.photos/seed/aurelia-room-garden/800/560" alt="Garden Terrace Room" loading="lazy" />
+        </div>
+        <div class="room-card__body">
+          <div class="room-card__top">
+            <h3>Garden Terrace</h3>
+            <p class="room-card__price">€310<span>/ night</span></p>
+          </div>
+          <p class="room-card__desc">A serene retreat opening onto citrus gardens and a shared lounge terrace.</p>
+          <ul class="room-card__amenities">
+            <li>🛏️ Queen Bed</li>
+            <li>🌿 Garden View</li>
+            <li>☕ Nespresso Bar</li>
+          </ul>
+          <a href="#booking" class="room-card__cta">Reserve Suite <span>→</span></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- AMENITIES -->
+<section class="amenities" id="amenities">
+  <div class="container">
+    <div class="section-head section-head--light">
+      <p class="eyebrow reveal">Experience</p>
+      <h2 class="reveal">Every Detail, Considered</h2>
+    </div>
+    <div class="amenities__grid">
+      <div class="amenity reveal">
+        <div class="amenity__icon">🍽️</div>
+        <h3>Michelin Dining</h3>
+        <p>Seasonal tasting menus by our resident chef, served cliffside at sunset.</p>
+      </div>
+      <div class="amenity reveal">
+        <div class="amenity__icon">🧖</div>
+        <h3>Cliffside Spa</h3>
+        <p>Thermal pools, hammam rituals, and treatments inspired by the Mediterranean.</p>
+      </div>
+      <div class="amenity reveal">
+        <div class="amenity__icon">🏊</div>
+        <h3>Infinity Pool</h3>
+        <p>An uninterrupted horizon line where the pool meets the sea.</p>
+      </div>
+      <div class="amenity reveal">
+        <div class="amenity__icon">⛵</div>
+        <h3>Private Yacht</h3>
+        <p>Sunset charters and secluded cove excursions, just for guests.</p>
+      </div>
+      <div class="amenity reveal">
+        <div class="amenity__icon">🥂</div>
+        <h3>Wine Cellar</h3>
+        <p>A curated collection of rare regional vintages, open for private tastings.</p>
+      </div>
+      <div class="amenity reveal">
+        <div class="amenity__icon">🧘</div>
+        <h3>Sunrise Yoga</h3>
+        <p>Daily sessions on the terrace, overlooking the bay as the sky wakes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow reveal">Gallery</p>
+      <h2 class="reveal">Moments at Aurelia</h2>
+    </div>
+  </div>
+  <div class="gallery__grid" id="galleryGrid">
+    <img class="reveal" src="https://picsum.photos/seed/aurelia-g1/700/900" alt="Gallery photo 1" loading="lazy" />
+    <img class="reveal" src="https://picsum.photos/seed/aurelia-g2/900/700" alt="Gallery photo 2" loading="lazy" />
+    <img class="reveal" src="https://picsum.photos/seed/aurelia-g3/700/700" alt="Gallery photo 3" loading="lazy" />
+    <img class="reveal" src="https://picsum.photos/seed/aurelia-g4/900/700" alt="Gallery photo 4" loading="lazy" />
+    <img class="reveal" src="https://picsum.photos/seed/aurelia-g5/700/900" alt="Gallery photo 5" loading="lazy" />
+    <img class="reveal" src="https://picsum.photos/seed/aurelia-g6/900/900" alt="Gallery photo 6" loading="lazy" />
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="reviews" id="reviews">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow reveal">Guest Stories</p>
+      <h2 class="reveal">Loved by Travelers Worldwide</h2>
+    </div>
+    <div class="reviews__slider reveal">
+      <div class="reviews__track" id="reviewsTrack">
+        <figure class="review-card">
+          <div class="review-card__stars">★★★★★</div>
+          <blockquote>"The most restorative week of our lives. The penthouse terrace at sunset is something we'll never forget."</blockquote>
+          <figcaption>
+            <img src="https://picsum.photos/seed/aurelia-guest1/80/80" alt="" />
+            <div><strong>Elena Marchetti</strong><span>Milan, Italy</span></div>
+          </figcaption>
+        </figure>
+        <figure class="review-card">
+          <div class="review-card__stars">★★★★★</div>
+          <blockquote>"Impeccable service from arrival to departure. The staff remembered our names and our preferences by day two."</blockquote>
+          <figcaption>
+            <img src="https://picsum.photos/seed/aurelia-guest2/80/80" alt="" />
+            <div><strong>James Whitfield</strong><span>London, UK</span></div>
+          </figcaption>
+        </figure>
+        <figure class="review-card">
+          <div class="review-card__stars">★★★★★</div>
+          <blockquote>"Worth every euro. The private yacht excursion to the hidden cove was the highlight of our honeymoon."</blockquote>
+          <figcaption>
+            <img src="https://picsum.photos/seed/aurelia-guest3/80/80" alt="" />
+            <div><strong>Sofia &amp; Marco</strong><span>São Paulo, Brazil</span></div>
+          </figcaption>
+        </figure>
+        <figure class="review-card">
+          <div class="review-card__stars">★★★★★</div>
+          <blockquote>"A rare find — quiet, elegant, and genuinely warm. We've already booked our return for next spring."</blockquote>
+          <figcaption>
+            <img src="https://picsum.photos/seed/aurelia-guest4/80/80" alt="" />
+            <div><strong>Aiko Tanaka</strong><span>Kyoto, Japan</span></div>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="reviews__nav">
+        <button id="reviewPrev" aria-label="Previous review">←</button>
+        <div class="reviews__dots" id="reviewDots"></div>
+        <button id="reviewNext" aria-label="Next review">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="booking" id="booking">
+  <div class="container booking__grid">
+    <div class="booking__intro">
+      <p class="eyebrow reveal">Reserve</p>
+      <h2 class="reveal">Begin Your Escape</h2>
+      <p class="reveal">Check availability and secure your suite. Our concierge will confirm within one hour and tailor every detail of your stay.</p>
+      <ul class="booking__perks reveal">
+        <li>✓ Best rate guaranteed</li>
+        <li>✓ Free cancellation up to 48h</li>
+        <li>✓ Complimentary breakfast</li>
+      </ul>
+    </div>
+    <form class="booking__form reveal" id="bookingForm" novalidate>
+      <div class="form-row">
+        <div class="field">
+          <label for="checkin">Check-in</label>
+          <input type="date" id="checkin" name="checkin" required />
+        </div>
+        <div class="field">
+          <label for="checkout">Check-out</label>
+          <input type="date" id="checkout" name="checkout" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="guests">Guests</label>
+          <select id="guests" name="guests">
+            <option>1 Guest</option>
+            <option selected>2 Guests</option>
+            <option>3 Guests</option>
+            <option>4+ Guests</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="roomType">Suite Type</label>
+          <select id="roomType" name="roomType">
+            <option>Deluxe Sea View</option>
+            <option>Cliffside Penthouse</option>
+            <option>Garden Terrace</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required />
+      </div>
+      <p class="field-error" id="formError" role="alert"></p>
+      <button type="submit" class="btn btn--gold btn--block">Check Availability</button>
+      <p class="form-success" id="formSuccess" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<!-- CONTACT / FOOTER -->
+<footer class="footer" id="contact">
+  <div class="container footer__grid">
+    <div class="footer__col footer__brand">
+      <a href="#home" class="nav__logo">AURELIA</a>
+      <p>Via delle Scogliere 12, Positano, Amalfi Coast, Italy</p>
+      <p>+39 089 123 4567 · stay@aurelia-resort.com</p>
+    </div>
+    <div class="footer__col">
+      <h4>Explore</h4>
+      <a href="#rooms">Suites &amp; Residences</a>
+      <a href="#amenities">Amenities</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#reviews">Guest Reviews</a>
+    </div>
+    <div class="footer__col">
+      <h4>Newsletter</h4>
+      <p>Seasonal offers &amp; coastal stories, once a month.</p>
+      <form class="newsletter" id="newsletterForm">
+        <input type="email" placeholder="Your email" required aria-label="Email for newsletter" />
+        <button type="submit" aria-label="Subscribe">→</button>
+      </form>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <p>© <span id="year"></span> Aurelia Hotel &amp; Resort. All rights reserved.</p>
+    <div class="footer__social">
+      <a href="#" aria-label="Instagram">IG</a>
+      <a href="#" aria-label="Facebook">FB</a>
+      <a href="#" aria-label="Pinterest">PT</a>
+    </div>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox__close" id="lightboxClose" aria-label="Close">✕</button>
+  <img id="lightboxImg" src="" alt="" />
+</div>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+<script src="script.js"></script>
+</body>
+</html>
